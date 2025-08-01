@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zip밥 웹앱</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .container.active {
+      display: block;
+    }
+    button {
+      padding: 10px 16px;
+      margin: 8px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ffa94d;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff922b;
+    }
+    h2, h3 {
+      text-align: center;
+    }
+    ul, ol {
+      text-align: left;
+      padding-left: 20px;
+    }
+    img {
+      width: 100%;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+    .tip {
+      background-color: #fff3cd;
+      border-left: 5px solid #ffeeba;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+    .footer, .back-btn {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .saving {
+      font-size: 14px;
+      color: #28a745;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .ingredient-list label {
+      display: block;
+      text-align: left;
+      margin: 5px;
+    }
+    .comment-box {
+      margin-top: 30px;
+      text-align: left;
+    }
+    .comment-box textarea {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+      font-size: 14px;
+    }
+    .comment {
+      margin-top: 10px;
+      background: #f8f8f8;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 홈 화면 -->
+<div class="container active" id="home">
+  <h2>당신은 지금 🍲 <span>된장찌개</span>가 땡긴다!</h2>
+  <button onclick="show('recipe')">된장찌개 하러가기</button>
+  <button onclick="show('top5')">음... 별로 🤔</button>
+  <div class="saving">이번 주 zip밥으로 23,500원을 절약했어요!</div>
+</div>
+
+<!-- 인기 메뉴 -->
+<div class="container" id="top5">
+  <h2>이번 주 인기 메뉴 TOP 5</h2>
+  <ul>
+    <li><button onclick="selectMenu('제육볶음')">제육볶음</button></li>
+    <li><button onclick="selectMenu('된장찌개')">된장찌개</button></li>
+    <li><button onclick="selectMenu('김치찌개')">김치찌개</button></li>
+    <li><button onclick="selectMenu('계란찜')">계란찜</button></li>
+    <li><button onclick="selectMenu('닭갈비')">닭갈비</button></li>
+  </ul>
+  <div class="back-btn"><button onclick="goBack()">← 뒤로</button></div>
+</div>
+
+<!-- 장바구니/레시피 -->
+<div class="container" id="recipe">
+  <h2 id="menuTitle">된장찌개 레시피</h2>
+  <img src="https://images.unsplash.com/photo-1604908177198-944f7c9aa8ec?auto=format&fit=crop&w=800&q=80" alt="된장찌개" />
+  <h3>🛒 재료</h3>
+  <div class="ingredient-list" id="ingredientList">
+    <label><input type="checkbox" checked value="된장"> 된장 1큰술</label>
+    <label><input type="checkbox" checked value="물"> 물 500ml</label>
+    <label><input type="checkbox" checked value="두부"> 두부 1/4모</label>
+    <label><input type="checkbox" checked value="애호박"> 애호박 1/3개</label>
+    <label><input type="checkbox" checked value="양파"> 양파 1/4개</label>
+    <label><input type="checkbox" checked value="대파"> 대파 약간</label>
+  </div>
+  <button onclick="goToCoupang()">쿠팡프레시에서 재료 구매</button>
+  <div class="footer">
+    <button onclick="show('cook')">요리 시작하기</button>
+  </div>
+  <div class="back-btn"><button onclick="goBack()">← 뒤로</button></div>
+</div>
+
+<!-- 조리법 + 댓글 UI -->
+<div class="container" id="cook">
+  <h2>된장찌개 조리법</h2>
+  <img src="https://images.unsplash.com/photo-1604908177198-944f7c9aa8ec?auto=format&fit=crop&w=800&q=80" />
+  <ol>
+    <li>재료를 손질한다.</li>
+    <li>된장을 물에 풀고 끓인다.</li>
+    <li>애호박→양파→두부 순으로 넣는다.</li>
+    <li>대파를 넣고 한소끔 끓인다.</li>
+  </ol>
+  <div class="tip">💡 멸치 다시마 육수를 쓰면 감칠맛이 살아나요!</div>
+  <div class="footer">
+    <button onclick="alert('좋아요 +10P 적립!')">👍 좋아요</button>
+    <button onclick="alert('싫어요 -5P')">👎 싫어요</button>
+  </div>
+  <div class="comment-box">
+    <h3>💬 댓글</h3>
+    <textarea placeholder="댓글을 입력하세요..."></textarea>
+    <div class="comment">익명1: 너무 맛있게 잘 먹었어요!</div>
+    <div class="comment">요리초보: 두부 먼저 넣어도 괜찮더라구요~</div>
+  </div>
+  <div class="back-btn"><button onclick="goBack()">← 뒤로</button></div>
+</div>
+
+<script>
+  const historyStack = [];
+
+  function show(id) {
+    document.querySelectorAll(".container").forEach(c => c.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    historyStack.push(id);
+  }
+
+  function goBack() {
+    historyStack.pop(); // 현재 페이지 제거
+    const prev = historyStack.pop(); // 이전 페이지
+    if (prev) show(prev);
+    else show("home");
+  }
+
+  function selectMenu(menu) {
+    document.getElementById("menuTitle").innerText = menu + " 레시피";
+    show("recipe");
+  }
+
+  function goToCoupang() {
+    const selected = Array.from(document.querySelectorAll("#ingredientList input:checked"))
+      .map(i => i.value)
+      .join("+");
+    const url = "https://www.coupang.com/np/search?q=" + encodeURIComponent(selected);
+    window.open(url, "_blank");
+  }
+</script>
+
+</body>
+</html>
